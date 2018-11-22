@@ -80,7 +80,7 @@ filter = sshd
 action = iptables[name=SSH, port=$ssh_port, protocol=tcp]
 logpath = /var/log/secure
 maxretry = $maxretry
-findtime = 3600
+findtime = 300
 bantime = $bantime
 EOF
 else
@@ -96,7 +96,7 @@ filter = sshd
 action = iptables[name=SSH, port=$ssh_port, protocol=tcp]
 logpath = /var/log/auth.log
 maxretry = $maxretry
-findtime = 3600
+findtime = 300
 bantime = $bantime
 EOF
 fi
@@ -116,8 +116,8 @@ if [ $PKG == yum ]; then
     systemctl enable firewalld.service
     systemctl start firewalld.service
 
-    firealld-cmd --permanent --add-port=$ssh_port/tcp --zone=public
-    firealld-cmd --reload
+    firewall-cmd --permanent --add-port=$ssh_port/tcp --zone=public
+    firewall-cmd --reload
 else
     ufw enable
     ufw default deny
