@@ -39,13 +39,13 @@ while :; do echo
             elif [ -n "`grep ^Port /etc/ssh/sshd_config`" ];then
                 sed -i "s@^Port.*@Port $SSH_PORT@" /etc/ssh/sshd_config
             fi
+            ssh_port=$SSH_PORT
         fi
         break
     elif [ ${IfChangeSSHPort} == 'n' ]; then
         break
     fi
 done
-ssh_port=$SSH_PORT
 echo ""
 read -p "Input the maximun times for trying [2-10], default 3: " maxretry
 [ -z "${maxretry}" ] && maxretry=3
@@ -73,7 +73,7 @@ cat <<EOF >> /etc/fail2ban/jail.local
 ignoreip = 127.0.0.1
 bantime = 86400
 maxretry = $maxretry
-findtime = 1800
+findtime = 300
 [ssh-iptables]
 enabled = true
 filter = sshd
