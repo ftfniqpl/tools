@@ -9,10 +9,10 @@ clear
 [ -z "`grep ^Port /etc/ssh/sshd_config`" ] && ssh_port=22 || ssh_port=`grep ^Port /etc/ssh/sshd_config | awk '{print $2}'`
 
 #CheckOS
-[ -z "$(which apt)" ] && PKG=yum
-[ -z "$(which yum)" ] && PKG=apt
+[ -z "$(which apt)" ] && PKG=centos
+[ -z "$(which yum)" ] && PKG=ubuntu
 
-echo $PKG
+echo "os is: " $PKG
 
 #Read Imformation From The User
 echo "Welcome to Fail2ban!"
@@ -21,7 +21,7 @@ echo ""
 
 while :; do echo
     read -p "Do you want to change your SSH Port? [y/n], default n: " IfChangeSSHPort
-    [ -z ""${IfChangeSSHPort} ] && IfChangeSSHPort='n'
+    [ -z "${IfChangeSSHPort}" ] && IfChangeSSHPort=n
     if [ ${IfChangeSSHPort} == 'y' ]; then
         if [ -e "/etc/ssh/sshd_config" ];then
             [ -z "`grep ^Port /etc/ssh/sshd_config`" ] && ssh_port=22 || ssh_port=`grep ^Port /etc/ssh/sshd_config | awk '{print $2}'`
@@ -56,7 +56,7 @@ read -p "Input the lasting time for blocking a IP [hours], default 24: " bantime
 ((bantime=$bantime*60*60))
 echo $bantime
 #Install
-if [ $PKG == yum ]; then
+if [ $PKG == centos ]; then
     yum -y install epel-release
     yum -y install fail2ban
 else
@@ -67,7 +67,7 @@ fi
 #Configure
 rm -rf /etc/fail2ban/jail.local
 touch /etc/fail2ban/jail.local
-if [ $PKG == yum ]; then
+if [ $PKG == centos ]; then
 cat <<EOF >> /etc/fail2ban/jail.local
 [DEFAULT]
 ignoreip = 127.0.0.1
@@ -102,7 +102,7 @@ EOF
 fi
 
 #Start
-if [ $PKG == yum ]; then
+if [ $PKG == centos ]; then
     systemctl restart fail2ban
     systemctl enable fail2ban
 else
@@ -112,7 +112,7 @@ fi
 
 echo "config firewalld"
 
-if [ $PKG == yum ]; then
+if [ $PKG == centos ]; then
     systemctl enable firewalld.service
     systemctl start firewalld.service
 
@@ -127,7 +127,7 @@ fi
 #Finish
 echo "Finish Installing ! Reboot the sshd now !"
 
-if [ $PKG == yum ]; then
+if [ $PKG == centos ]; then
     systemctl restart sshd
 else
     service ssh restart
