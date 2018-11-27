@@ -124,6 +124,13 @@ else
     ufw allow $ssh_port/tcp
 fi
 
+# disabled ssh root login
+read -p "Do you want to disabled ssh root login? [y/n], default n: " IfDisableSSHRootLogin
+[ -z "${IfDisableSSHRootLogin}" ] && IfDisableSSHRootLogin=n
+if [ ${IfDisableSSHRootLogin} == 'y' ]; then
+    sed -i "s/.*PermitRootLogin.*/PermitRootLogin no/g" /etc/ssh/sshd_config
+fi
+
 #Finish
 echo "Finish Installing ! Reboot the sshd now !"
 
