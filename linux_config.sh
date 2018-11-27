@@ -83,6 +83,9 @@ EOF'
     adduser $UserAccount
     usermod -aG sudo $UserAccount
 
+# disabled postfix.service
+systemctl disable postfix.service
+systemctl stop postfix.service
 
 echo "switch user:" $UserAccount
 
