@@ -74,7 +74,8 @@ ignoreip = 127.0.0.1
 bantime = 86400
 maxretry = $maxretry
 findtime = 300
-[ssh-iptables]
+
+[ssh]
 enabled = true
 filter = sshd
 action = iptables[name=SSH, port=$ssh_port, protocol=tcp]
@@ -82,6 +83,14 @@ logpath = /var/log/secure
 maxretry = $maxretry
 findtime = 300
 bantime = $bantime
+
+[dovecot]
+enabled  = true
+filter   = dovecot
+action   = iptables[name=dovecot, port="pop3,pop3s,imap,imaps,smtp,smtps,submission,sieve", protocol=tcp]
+logpath  = /var/log/secure
+maxretry = 3
+bantime  = 3600
 EOF
 else
 cat <<EOF >> /etc/fail2ban/jail.local
@@ -90,7 +99,8 @@ ignoreip = 127.0.0.1
 bantime = 86400
 maxretry = $maxretry
 findtime = 1800
-[ssh-iptables]
+
+[ssh]
 enabled = true
 filter = sshd
 action = iptables[name=SSH, port=$ssh_port, protocol=tcp]
@@ -98,6 +108,14 @@ logpath = /var/log/auth.log
 maxretry = $maxretry
 findtime = 300
 bantime = $bantime
+
+[dovecot]
+enabled  = true
+filter   = dovecot
+action   = iptables[name=dovecot, port="pop3,pop3s,imap,imaps,smtp,smtps,submission,sieve", protocol=tcp]
+logpath  = /var/log/secure
+maxretry = 3
+bantime  = 3600
 EOF
 fi
 
