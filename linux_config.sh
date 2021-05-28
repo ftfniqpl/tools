@@ -25,18 +25,18 @@ if [ $PKG == centos ]; then
 EOF'
 
     yum install tree ssh vim wget curl net-tools git -y
-    yum -y install ius-release-1.0-15.ius.centos7.noarch.rpm
-    yum -y install python36u  python36u-devel python36u-pip
+    yum install -y https://repo.ius.io/ius-release-el7.rpm
+    yum install -y python36u python36u-libs python36u-devel python36u-pip
     yum -y install yum install python2-devel python2-pip
 
     pip install -U pip
     pip3 install -U pip
     pip install virtualenvwrapper
     pip3 install virtualenvwrapper
-    yum install supervisor -y
+    #yum install supervisor -y
 
-    systemctl enable supervisor
-    service supervisor restart
+    #systemctl enable supervisor
+    #service supervisor restart
 
     echo "create user"
 
